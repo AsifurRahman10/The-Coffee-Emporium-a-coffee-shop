@@ -8,6 +8,11 @@ import { AddCoffee } from "./Pages/AddCoffee.jsx";
 import { UpdateCoffee } from "./Pages/UpdateCoffee.jsx";
 import { CoffeeDetails } from "./Pages/CoffeeDetails.jsx";
 import { Error } from "./Pages/Error.jsx";
+import { Login } from "./Pages/Login.jsx";
+import { AuthProvider } from "./Provider/Authprovider.jsx";
+import { Registration } from "./Pages/Registration.jsx";
+import { User } from "./Pages/User.jsx";
+import { PrivateRouter } from "./Layout/PrivateRouter.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,12 +44,31 @@ const router = createBrowserRouter([
         path: "*",
         element: <Error></Error>,
       },
+      {
+        path: "/login",
+        element: <Login></Login>,
+      },
+      {
+        path: "/registration",
+        element: <Registration></Registration>,
+      },
+      {
+        path: "/user",
+        element: (
+          <PrivateRouter>
+            <User></User>
+          </PrivateRouter>
+        ),
+        loader: () => fetch("http://localhost:5000/users"),
+      },
     ],
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <AuthProvider>
+      <RouterProvider router={router}></RouterProvider>
+    </AuthProvider>
   </StrictMode>
 );
